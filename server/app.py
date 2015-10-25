@@ -2,7 +2,7 @@ import requests
 from flask import Flask, redirect, url_for, session, abort
 from server.db import db
 from server.oauth import configure_oauth
-from server.models.accepted_emails import AcceptedEmail
+from server.models import AcceptedEmail, User
 
 
 app = Flask(__name__)
@@ -28,9 +28,8 @@ def index():
             session.pop('access_token', None)
             return redirect(url_for('login'))
 
-    if not AcceptedEmail.validate_oauth_resp(user_data):
+    user = User.get_or_create_user(user_data)
+    if not user:
         abort(403)
 
-
-
-    return str(user_data)
+    return user.__repr__()
