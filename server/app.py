@@ -1,6 +1,7 @@
 import requests
-from flask import Flask, redirect, url_for, session
+from flask import Flask, redirect, url_for, session, abort
 from server.oauth import configure_oauth
+from server.models.accepted_emails import AcceptedEmail
 
 
 app = Flask(__name__)
@@ -16,20 +17,17 @@ def index():
         return redirect(url_for('login'))
 
     access_token = access_token[0]
-    from urllib2 import Request, urlopen, URLError
-
     headers = {'Authorization': 'OAuth {}'.format(access_token)}
     req = requests.get('https://www.googleapis.com/oauth2/v1/userinfo', headers=headers)
     try:
-        res = urlopen(req)
-    except URLError, e:
-        if e.code == 401:
+        user_data = req.json()
+    except ValueError as ex:
+        if ex.code == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
             return redirect(url_for('login'))
-        return res.read()
-    except:
-        abort(500)
 
-    return res.read()
+    if not AcceptedEmail.validate_oauth_resp(user_data):
+        abort(403)
 
+    return user_data['email']
