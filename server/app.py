@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, redirect, url_for, session
 from server.oauth import configure_oauth
 
@@ -18,8 +19,7 @@ def index():
     from urllib2 import Request, urlopen, URLError
 
     headers = {'Authorization': 'OAuth {}'.format(access_token)}
-    req = Request('https://www.googleapis.com/oauth2/v1/userinfo',
-                  None, headers)
+    req = requests.get('https://www.googleapis.com/oauth2/v1/userinfo', headers=headers)
     try:
         res = urlopen(req)
     except URLError, e:
@@ -28,6 +28,8 @@ def index():
             session.pop('access_token', None)
             return redirect(url_for('login'))
         return res.read()
+    except:
+        abort(500)
 
     return res.read()
 
