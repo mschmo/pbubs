@@ -31,4 +31,6 @@ def index():
     if not AcceptedEmail.validate_oauth_resp(user_data):
         abort(403)
 
-    return user_data['email']
+
+
+    return str(user_data)
