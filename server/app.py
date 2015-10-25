@@ -45,6 +45,11 @@ def dash():
     return render_template('dash.html')
 
 
+@app.route('/profile/<int:user_id>')
+def user_profile(user_id):
+    return render_template('profile.html')
+
+
 @app.route('/logout')
 def logout():
     session.pop('access_token', None)
