@@ -1,4 +1,5 @@
-from server import app
+#!/usr/bin/env python
+from server.app import app
 
 
 if __name__ == '__main__':
