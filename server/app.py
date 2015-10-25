@@ -21,10 +21,9 @@ def index():
     access_token = access_token[0]
     headers = {'Authorization': 'OAuth {}'.format(access_token)}
     req = requests.get('https://www.googleapis.com/oauth2/v1/userinfo', headers=headers)
-    try:
-        user_data = req.json()
-    except ValueError as ex:
-        if ex.code == 401:
+    user_data = req.json()
+    if user_data.get('error'):
+        if user_data['error']['code'] == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
             return redirect(url_for('login'))
