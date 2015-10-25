@@ -11,11 +11,15 @@ class User(ActiveModel, UserMixin, db.Model):
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    venmo_account = db.Column(db.String(64), nullable=False)
+    venmo_account = db.Column(db.String(64))
     avatar_url = db.Column(db.String(1024), nullable=False)
     active = db.Column(db.Boolean, nullable=False, default=True)
     admin = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    @property
+    def full_name(self):
+        return '{} {}'.format(self.first_name, self.last_name)
 
     @classmethod
     def get_or_create_user(cls, oauth_response):

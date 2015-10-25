@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, redirect, url_for, session, abort, request, render_template
-from flask.ext.login import LoginManager, login_user, logout_user
+from flask.ext.login import LoginManager, login_user, logout_user, login_required
 from server.db import db
 from server.oauth import configure_oauth
 from server.models import User
@@ -41,13 +41,16 @@ def index():
 
 
 @app.route('/dash')
+@login_required
 def dash():
     return render_template('dash.html')
 
 
 @app.route('/profile/<int:user_id>')
+@login_required
 def user_profile(user_id):
-    return render_template('profile.html')
+    user = User.query.get(user_id)
+    return render_template('profile.html', user=user)
 
 
 @app.route('/logout')
