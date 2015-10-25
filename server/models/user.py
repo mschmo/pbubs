@@ -11,7 +11,7 @@ class User(ActiveModel, UserMixin, db.Model):
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    venmo_account = db.Column(db.String(64), unique=True, nullable=False)
+    venmo_account = db.Column(db.String(64), nullable=False)
     avatar_url = db.Column(db.String(1024), nullable=False)
     active = db.Column(db.Boolean, nullable=False, default=True)
     admin = db.Column(db.Boolean, nullable=False, default=False)
