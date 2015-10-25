@@ -3,3 +3,5 @@ build/
 .idea/
 .vagrant/
 *.pyc
+
+server/config_local.py

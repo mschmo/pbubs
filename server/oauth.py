@@ -1,10 +1,16 @@
-from flask import Flask, redirect, url_for, session
 from flask_oauth import OAuth
 
 
-app = Flask(__name__)
-app.config.from_pyfile('config_default.py')
 oauth = OAuth()
+
+
+class OAuthSignIn:
+
+    def __init__(self, provider_name):
+        self.provider_name = provider_name
+        credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
+        self.consumer_id = credentials['id']
+        self.consumer_secret = credentials['secret']
 
 
 def configure_oauth(app):

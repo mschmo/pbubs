@@ -6,18 +6,6 @@ app = Flask(__name__)
 app.config.from_pyfile('config_default.py')
 oauth = OAuth()
 
-google = oauth.remote_app('google',
-                          base_url='https://www.google.com/accounts/',
-                          authorize_url='https://accounts.google.com/o/oauth2/auth',
-                          request_token_url=None,
-                          request_token_params={'scope': 'https://www.googleapis.com/auth/userinfo.email',
-                                                'response_type': 'code'},
-                          access_token_url='https://accounts.google.com/o/oauth2/token',
-                          access_token_method='POST',
-                          access_token_params={'grant_type': 'authorization_code'},
-                          consumer_key=app.config['GOOGLE_CLIENT_ID'],
-                          consumer_secret=app.config['GOOGLE_CLIENT_SECRET'])
-
 
 @app.route('/')
 def index():
@@ -28,7 +16,7 @@ def index():
     access_token = access_token[0]
     from urllib2 import Request, urlopen, URLError
 
-    headers = {'Authorization': 'OAuth '+access_token}
+    headers = {'Authorization': 'OAuth {}'.format(access_token)}
     req = Request('https://www.googleapis.com/oauth2/v1/userinfo',
                   None, headers)
     try:
@@ -45,12 +33,12 @@ def index():
 
 @app.route('/login')
 def login():
-    callback=url_for('authorized', _external=True)
+    callback = url_for('authorized', _external=True)
     return google.authorize(callback=callback)
 
 
 # Redirect
-@app.route('/authorized')
+@app.route('/oauth_redirect')
 @google.authorized_handler
 def authorized(resp):
     access_token = resp['access_token']
@@ -61,11 +49,3 @@ def authorized(resp):
 @google.tokengetter
 def get_access_token():
     return session.get('access_token')
-
-
-def main():
-    app.run()
-
-
-if __name__ == '__main__':
-    main()
