@@ -1,5 +1,6 @@
 import requests
 from flask import Flask, redirect, url_for, session, abort
+from server.db import db
 from server.oauth import configure_oauth
 from server.models.accepted_emails import AcceptedEmail
 
@@ -8,6 +9,7 @@ app = Flask(__name__)
 app.config.from_pyfile('config_default.py')
 app.config.from_pyfile('config_local.py', silent=True)
 configure_oauth(app)
+db.init_app(app)
 
 
 @app.route('/')

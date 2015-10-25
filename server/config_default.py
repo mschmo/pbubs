@@ -7,5 +7,5 @@ GOOGLE_CLIENT_ID = '<Client-ID>'
 GOOGLE_CLIENT_SECRET = '<Client-secret>'
 
 # MySQL SQL-Alchemy set up
-SQLALCHEMY_DATABASE_URI = 'mysql://local:local@127.0.0.1/catherine'
-SQLALCHEMY_MANAGE_DATABASE_URI = 'mysql://local:local@127.0.0.1'
+SQLALCHEMY_DATABASE_URI = 'mysql://local:local@127.0.0.1:3306/catherine'
+SQLALCHEMY_MANAGE_DATABASE_URI = 'mysql://local:local@127.0.0.1:3306'
