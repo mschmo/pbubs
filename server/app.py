@@ -43,7 +43,7 @@ def index():
 @app.route('/dash')
 @login_required
 def dash():
-    return render_template('dash.html')
+    return render_template('base.html')
 
 
 @app.route('/profile/<int:user_id>')
