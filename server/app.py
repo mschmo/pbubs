@@ -2,18 +2,8 @@ from flask import Flask, redirect, url_for, session
 from flask_oauth import OAuth
 
 
-# You must configure these 3 values from Google APIs console
-# https://code.google.com/apis/console
-GOOGLE_CLIENT_ID = '<Client-ID>'
-GOOGLE_CLIENT_SECRET = '<Client-secret>'
-REDIRECT_URI = '/authorized'  # one of the Redirect URIs from Google APIs console
-
-SECRET_KEY = 'development key'
-DEBUG = True
-
 app = Flask(__name__)
-app.debug = DEBUG
-app.secret_key = SECRET_KEY
+app.config.from_pyfile('config_default.py')
 oauth = OAuth()
 
 google = oauth.remote_app('google',
@@ -25,8 +15,9 @@ google = oauth.remote_app('google',
                           access_token_url='https://accounts.google.com/o/oauth2/token',
                           access_token_method='POST',
                           access_token_params={'grant_type': 'authorization_code'},
-                          consumer_key=GOOGLE_CLIENT_ID,
-                          consumer_secret=GOOGLE_CLIENT_SECRET)
+                          consumer_key=app.config['GOOGLE_CLIENT_ID'],
+                          consumer_secret=app.config['GOOGLE_CLIENT_SECRET'])
+
 
 @app.route('/')
 def index():
@@ -58,8 +49,8 @@ def login():
     return google.authorize(callback=callback)
 
 
-
-@app.route(REDIRECT_URI)
+# Redirect
+@app.route('/authorized')
 @google.authorized_handler
 def authorized(resp):
     access_token = resp['access_token']
