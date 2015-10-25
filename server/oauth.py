@@ -1,16 +1,8 @@
+from flask import url_for, session, redirect
 from flask_oauth import OAuth
 
 
 oauth = OAuth()
-
-
-class OAuthSignIn:
-
-    def __init__(self, provider_name):
-        self.provider_name = provider_name
-        credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
-        self.consumer_id = credentials['id']
-        self.consumer_secret = credentials['secret']
 
 
 def configure_oauth(app):
@@ -25,3 +17,21 @@ def configure_oauth(app):
                               access_token_params={'grant_type': 'authorization_code'},
                               consumer_key=app.config['GOOGLE_CLIENT_ID'],
                               consumer_secret=app.config['GOOGLE_CLIENT_SECRET'])
+
+    @app.route('/login')
+    def login():
+        callback = url_for('authorized', _external=True)
+        return google.authorize(callback=callback)
+
+
+    # Redirect
+    @app.route('/oauth_redirect')
+    @google.authorized_handler
+    def authorized(resp):
+        access_token = resp['access_token']
+        session['access_token'] = access_token, ''
+        return redirect(url_for('index'))
+
+    @google.tokengetter
+    def get_access_token():
+        return session.get('access_token')

@@ -1,10 +1,11 @@
 from flask import Flask, redirect, url_for, session
-from flask_oauth import OAuth
+from server.oauth import configure_oauth
 
 
 app = Flask(__name__)
 app.config.from_pyfile('config_default.py')
-oauth = OAuth()
+app.config.from_pyfile('config_local.py', silent=True)
+configure_oauth(app)
 
 
 @app.route('/')
@@ -30,22 +31,3 @@ def index():
 
     return res.read()
 
-
-@app.route('/login')
-def login():
-    callback = url_for('authorized', _external=True)
-    return google.authorize(callback=callback)
-
-
-# Redirect
-@app.route('/oauth_redirect')
-@google.authorized_handler
-def authorized(resp):
-    access_token = resp['access_token']
-    session['access_token'] = access_token, ''
-    return redirect(url_for('index'))
-
-
-@google.tokengetter
-def get_access_token():
-    return session.get('access_token')
