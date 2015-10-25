@@ -1,9 +1,10 @@
 from datetime import datetime
+from flask.ext.login import UserMixin
 from server.db import db, ActiveModel
 from server.models import AcceptedEmail
 
 
-class User(ActiveModel, db.Model):
+class User(ActiveModel, UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +31,9 @@ class User(ActiveModel, db.Model):
             user.avatar_url = oauth_response['picture']
             user.save()
         return user
+
+    def is_active(self):
+        return self.active
 
     def __repr__(self):
         return '<User {}>'.format(self.email)

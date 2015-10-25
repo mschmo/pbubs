@@ -1,8 +1,9 @@
 import requests
-from flask import Flask, redirect, url_for, session, abort
+from flask import Flask, redirect, url_for, session, abort, request, render_template
+from flask.ext.login import LoginManager, login_user, logout_user
 from server.db import db
 from server.oauth import configure_oauth
-from server.models import AcceptedEmail, User
+from server.models import User
 
 
 app = Flask(__name__)
@@ -10,6 +11,8 @@ app.config.from_pyfile('config_default.py')
 app.config.from_pyfile('config_local.py', silent=True)
 configure_oauth(app)
 db.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 @app.route('/')
@@ -32,4 +35,24 @@ def index():
     if not user:
         abort(403)
 
-    return user.__repr__()
+    remember_me = session.pop('remember_me', None)
+    login_user(user, remember=remember_me)
+    return redirect(request.values.get('state') or url_for('dash'))
+
+
+@app.route('/dash')
+def dash():
+    return render_template('dash.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('access_token', None)
+    logout_user()
+    return redirect(url_for('index'))
+
+
+# Authorization via login manager
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
