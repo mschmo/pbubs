@@ -43,7 +43,8 @@ def index():
 @app.route('/dash')
 @login_required
 def dash():
-    return render_template('base.html')
+    news_feed = []
+    return render_template('dash.html', news_feed=news_feed)
 
 
 @app.route('/profile/<int:user_id>')
