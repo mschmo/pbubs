@@ -3,5 +3,5 @@ build/
 .idea/
 .vagrant/
 *.pyc
-
+.DS_Store
 server/config_local.py
