@@ -30,7 +30,7 @@ def configure_oauth(app):
     def authorized(resp):
         access_token = resp['access_token']
         session['access_token'] = access_token, ''
-        return redirect(url_for('index'))
+        return redirect(url_for('auth_bp.index'))
 
     @google.tokengetter
     def get_access_token():
