@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask.ext.login import UserMixin
 from server.db import db, ActiveModel
-from server.models import AcceptedEmail
+from server.auth.models import AcceptedEmail
 
 
 class User(ActiveModel, UserMixin, db.Model):

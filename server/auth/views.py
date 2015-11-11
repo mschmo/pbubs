@@ -1,7 +1,7 @@
 import requests
 from flask import Blueprint, redirect, session, url_for, request, abort
 from flask.ext.login import LoginManager, login_user, logout_user
-from server.models import User
+from server.core.models import User
 
 
 login_manager = LoginManager()

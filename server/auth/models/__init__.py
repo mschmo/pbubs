@@ -1,0 +1,1 @@
+from .accepted_emails import AcceptedEmail
