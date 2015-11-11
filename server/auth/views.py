@@ -30,7 +30,7 @@ def index():
 
     remember_me = session.pop('remember_me', None)
     login_user(user, remember=remember_me)
-    return redirect(request.values.get('state') or url_for('dash'))
+    return redirect(request.values.get('state') or url_for('core.dash'))
 
 
 @auth_bp.route('/logout')
