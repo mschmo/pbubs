@@ -17,5 +17,17 @@ class Bill(ActiveModel, db.Model):
     def pretty_date(self):
         return self.created_at.strftime('%b %d, %Y')
 
+    @classmethod
+    def create_bill(cls, form, user_id):
+        bill = cls(
+            type_id=form.bill_type.data,
+            user_id=user_id,
+            comment=form.comment.data,
+            amount=form.amount.data,
+            created_at=datetime.now()
+        )
+        bill.save()
+        return bill
+
     def __repr__(self):
         return '<Bill {}>'.format(self.id)

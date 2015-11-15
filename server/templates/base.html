@@ -38,14 +38,14 @@
                         1816
                     </div>
                 </li>
-                <li>
-                    <a href="{{ url_for('core.dash') }}"><i class="fa fa-diamond"></i> <span class="nav-label">Main Dash</span></a>
+                <li class="{{ 'active' if nav_tab == 'main' else '' }}">
+                    <a href="{{ url_for('core.dash') }}"><i class="fa fa-dashboard"></i> <span class="nav-label">Main Dash</span></a>
                 </li>
-                <li>
+                <li class="{{ 'active' if nav_tab.startswith('bills') else '' }}">
                     <a href="#"><i class="fa fa-table"></i> <span class="nav-label">Bills</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li><a href="{{ url_for('bills.view_all') }}">View All</a></li>
-                        <li><a href="{{ url_for('bills.new_bill') }}">Post New</a></li>
+                        <li class="{{ 'active' if nav_tab == 'bills_view_all' else '' }}"><a href="{{ url_for('bills.view_all') }}">View All</a></li>
+                        <li class="{{ 'active' if nav_tab == 'bills_new' else '' }}"><a href="{{ url_for('bills.new_bill') }}">Post New</a></li>
                     </ul>
                 </li>
             </ul>
@@ -58,11 +58,6 @@
         <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" action="search_results.html">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                </div>
-            </form>
         </div>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
@@ -97,9 +92,9 @@
         </div>
 
             <div class="sidebard-panel">
-                <div>
-                    <button type="button" class="btn btn-w-m btn-info">Post Bill</button>
-                    <button type="button" class="btn btn-w-m btn-success">Pay Bill</button>
+                <div class="btn-group" style="margin:15px;">
+                    <a type="button" class="btn btn-info" href="{{ url_for('bills.new_bill') }}">Post Bill</a>
+                    <a type="button" class="btn btn-primary" href="{{ url_for('bills.view_all') }}">Pay Bill</a>
                 </div>
                 <div>
                     <h4>News Feed <span class="badge badge-info pull-right">{{ news_feed|length }}</span></h4>
@@ -115,22 +110,6 @@
                             </div>
                         </div>
                     {% endfor %}
-                </div>
-                <div class="m-t-md">
-                    <h4>Statistics</h4>
-                    <p>
-                        Total amount paid, who has paid the most, etc.
-                    </p>
-                    <div class="row m-t-sm">
-                        <div class="col-md-6">
-                            <span class="bar">5,3,9,6,5,9,7,3,5,2</span>
-                            <h5><strong>169</strong> Posts</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <span class="line">5,3,9,6,5,9,7,3,5,2</span>
-                            <h5><strong>28</strong> Orders</h5>
-                        </div>
-                    </div>
                 </div>
             </div>
 
