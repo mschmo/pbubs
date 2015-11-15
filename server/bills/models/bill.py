@@ -13,5 +13,9 @@ class Bill(ActiveModel, db.Model):
     active = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    @property
+    def pretty_date(self):
+        return self.created_at.strftime('%b %d, %Y')
+
     def __repr__(self):
         return '<Bill {}>'.format(self.id)

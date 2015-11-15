@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <link href="{{ url_for('static', filename='css/plugins/chosen/chosen.css') }}" rel="stylesheet">
+{% endblock styles %}
+
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>{{ bill.comment or 'Bill' }}</h2>
+        </div>
+    </div>
+    <br />
+
+    <h3>
+    Posted on {{ bill.pretty_date }}
+    </h3>
+{% endblock content %}
