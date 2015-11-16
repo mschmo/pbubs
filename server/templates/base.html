@@ -66,20 +66,23 @@
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell"></i>  <span class="label label-primary">2</span>
+                        <i class="fa fa-bell"></i>
+                        {% set num_unpaid_bills = current_user.has_unpaid_bills() %}
+                        {% if num_unpaid_bills %}
+                            <span class="label label-primary">{{ num_unpaid_bills }}</span>
+                        {% endif %}
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
                         <li>
-                            <a href="mailbox.html">
+                            <a href="{{ url_for('bills.user_bills') }}">
                                 <div>
-                                    <i class="fa fa-envelope fa-fw"></i> You have 2 unpaid bills
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                    <i class="fa fa-envelope fa-fw"></i> You have {{ num_unpaid_bills }} unpaid bills
+                                    <span class="pull-right text-muted small">${{ '{:,.2f}'.format(current_user.unpaid_due()) }} due</span>
                                 </div>
                             </a>
                         </li>
                     </ul>
                 </li>
-
 
                 <li>
                     <a href="{{ url_for('auth_bp.logout') }}">
@@ -95,7 +98,7 @@
             <div class="sidebard-panel">
                 <div class="btn-group" style="margin:15px;">
                     <a type="button" class="btn btn-info" href="{{ url_for('bills.new_bill') }}">Post Bill</a>
-                    <a type="button" class="btn btn-primary" href="{{ url_for('bills.view_all') }}">Pay Bill</a>
+                    <a type="button" class="btn btn-primary" href="{{ url_for('bills.user_bills') }}">Pay Bill</a>
                 </div>
                 <div>
                     <h4>News Feed <span class="badge badge-info pull-right">{{ news_feed|length }}</span></h4>

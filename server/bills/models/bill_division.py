@@ -12,6 +12,10 @@ class BillDivision(ActiveModel, db.Model):
 
     bill = db.relationship('Bill', foreign_keys='BillDivision.bill_id', uselist=False, backref='divisions')
 
+    @property
+    def amount(self):
+        return self.bill.division_amount()
+
     @classmethod
     def add_new_divisions(cls, bill, users_to_pay=[], exclude=None):
         if not users_to_pay:

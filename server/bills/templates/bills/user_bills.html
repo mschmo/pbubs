@@ -1,6 +1,11 @@
 {% set nav_tab = 'bills_user' %}
 {% extends 'base.html' %}
 
+{% block styles %}
+    <link href="{{ url_for('static', filename='css/plugins/iCheck/custom.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
+{% endblock styles %}
+
 {% block content %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
@@ -9,30 +14,112 @@
     </div>
     <br />
 
-    <h1>To Pay</h1>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover dataTables-example" >
-            <thead>
-            <tr>
-                <th>Type</th>
-                <th>Date Posted</th>
-                <th>Comments</th>
-                <th>Amount Owed</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody>
-                {% for division in divisions_to_pay %}
-                    <tr class="gradeX">
-                        <td>{{ division.bill.bill_type.name }}</td>
-                        <td>{{ division.bill.pretty_date }}</td>
-                        <td>{{ division.bill.comment }}</td>
-                        <td style="text-align:center">${{ '{:,}'.format(division.bill.division_amount()) }}</td>
-                        <td style="text-align:center"><a href="{{ division.bill.venmo_link() }}"><i class="fa fa-credit-card text-navy"></i></a></td>
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab-1"> Unpaid</a></li>
+            <li class=""><a data-toggle="tab" href="#tab-2">Paid</a></li>
+        </ul>
+    <div class="tab-content">
+        <div id="tab-1" class="tab-pane active">
+            <div class="table-responsive">
+                <form class="form-horizontal">
+                <table class="table table-striped table-bordered table-hover dataTables-example" >
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Type</th>
+                        <th>Date Posted</th>
+                        <th>Comments</th>
+                        <th>Amount Owed</th>
+                        <th>Options</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        {% for division in divisions_to_pay %}
+                            <tr class="gradeX">
+                                <td style="text-align:center">
+                                    <div class="i-checks">
+                                        <input type="checkbox"> <i></i>
+                                    </div>
+                                </td>
+                                <td>{{ division.bill.bill_type.name }}</td>
+                                <td>{{ division.bill.pretty_date }}</td>
+                                <td>{{ division.bill.comment }}</td>
+                                <td style="text-align:center">${{ '{:,}'.format(division.bill.division_amount()) }}</td>
+                                <td style="text-align:center">
+                                    <a href="{{ division.bill.venmo_link() }}" target="blank">
+                                        <i class="fa fa-credit-card text-navy"></i>
+                                    </a>
+                                    {% if division.bill.user_id == current_user.id %}
+                                        <a href="{{ url_for('bills.view_bill', bill_id=division.bill_id) }}">
+                                            <i class="fa fa-edit text-warning"></i>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" type="submit">Mark as Paid</button>
+                </form>
+            </div>
+        </div>
+        <div id="tab-2" class="tab-pane">
+
+            <div class="table-responsive">
+                <form class="form-horizontal">
+                <table class="table table-striped table-bordered table-hover dataTables-example" >
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Type</th>
+                        <th>Date Posted</th>
+                        <th>Comments</th>
+                        <th>Amount Owed</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for division in divisions_paid %}
+                            <tr class="gradeX">
+                                <td style="text-align:center">
+                                    <div class="i-checks">
+                                        <input type="checkbox"> <i></i>
+                                    </div>
+                                </td>
+                                <td>{{ division.bill.bill_type.name }}</td>
+                                <td>{{ division.bill.pretty_date }}</td>
+                                <td>{{ division.bill.comment }}</td>
+                                <td style="text-align:center">${{ '{:,}'.format(division.bill.division_amount()) }}</td>
+                                <td style="text-align:center">
+                                    <a href="{{ division.bill.venmo_link() }}" target="blank">
+                                        <i class="fa fa-credit-card text-navy"></i>
+                                    </a>
+                                    {% if division.bill.user_id == current_user.id %}
+                                        <a href="{{ url_for('bills.view_bill', bill_id=division.bill_id) }}">
+                                            <i class="fa fa-edit text-warning"></i>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="btn btn-danger" type="submit">Mark as Unpaid</button>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock content %}
-]
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/plugins/iCheck/icheck.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+{% endblock scripts %}

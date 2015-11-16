@@ -40,9 +40,17 @@ def view_bill(bill_id):
     return render_template('bills/view_bill.html', bill=bill)
 
 
+@bills.route('/user')
 @bills.route('/user/<int:user_id>')
-def user_bills(user_id):
+def user_bills(user_id=None):
+    if not user_id:
+        user_id = current_user.id
     divisions_to_pay = BillDivision.get_user_bills_to_pay(user_id)
     bills_posted = Bill.query.filter(Bill.user_id==user_id).all()
+    divisions_paid = BillDivision.query.filter(BillDivision.user_id==user_id, BillDivision.payed==1).all()
     user = User.query.get(user_id)
-    return render_template('bills/user_bills.html', divisions_to_pay=divisions_to_pay, bills_posted=bills_posted, user=user)
+    return render_template('bills/user_bills.html',
+                           divisions_to_pay=divisions_to_pay,
+                           bills_posted=bills_posted,
+                           divisions_paid=divisions_paid,
+                           user=user)
