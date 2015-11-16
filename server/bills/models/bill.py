@@ -13,7 +13,7 @@ class Bill(ActiveModel, db.Model):
     active = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    bill_type = db.relationship('BillType', foreign_keys='Bill.type_id', uselist=False, backref='events')
+    bill_type = db.relationship('BillType', foreign_keys='Bill.type_id', uselist=False, backref='bills')
 
     @property
     def pretty_date(self):
@@ -30,6 +30,14 @@ class Bill(ActiveModel, db.Model):
         )
         bill.save()
         return bill
+
+    def division_amount(self):
+        from server.bills.models import BillDivision
+        return self.amount / BillDivision.query.filter(BillDivision.bill_id==self.id).count()
+
+    def is_paid(self):
+        from server.bills.models import BillDivision
+        return all([division.payed for division in BillDivision.query.filter(BillDivision.bill_id==self.id).all()])
 
     def __repr__(self):
         return '<Bill {}>'.format(self.id)

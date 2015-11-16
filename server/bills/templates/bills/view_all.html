@@ -24,16 +24,18 @@
                 <th>Date Posted</th>
                 <th>Comments</th>
                 <th>Total Amount</th>
+                <th>Paid</th>
             </tr>
             </thead>
             <tbody>
                 {% for bill in bills %}
                     <tr class="gradeX">
-                        <td><a href="{{ url_for('bills.view_bill', bill_id=bill.id) }}">{{ bill.id }}</a></td>
+                        <td style="text-align:center"><a href="{{ url_for('bills.view_bill', bill_id=bill.id) }}">{{ bill.id }}</a></td>
                         <td>{{ bill.bill_type.name }}</td>
                         <td>{{ bill.pretty_date }}</td>
-                        <td class="center">{{ bill.comment }}</td>
-                        <td class="center">${{ '{:,}'.format(bill.amount) }}</td>
+                        <td>{{ bill.comment }}</td>
+                        <td style="text-align:center">${{ '{:,}'.format(bill.amount) }}</td>
+                        <td style="text-align:center"><i class="fa {{ 'fa-check text-navy' if bill.is_paid() else 'fa-remove text-danger' }}"></i></td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -46,6 +46,7 @@
                     <ul class="nav nav-second-level collapse">
                         <li class="{{ 'active' if nav_tab == 'bills_view_all' else '' }}"><a href="{{ url_for('bills.view_all') }}">View All</a></li>
                         <li class="{{ 'active' if nav_tab == 'bills_new' else '' }}"><a href="{{ url_for('bills.new_bill') }}">Post New</a></li>
+                        <li class="{{ 'active' if nav_tab == 'bills_user' else '' }}"><a href="{{ url_for('bills.user_bills', user_id=current_user.id) }}">Your Bills</a></li>
                     </ul>
                 </li>
             </ul>
