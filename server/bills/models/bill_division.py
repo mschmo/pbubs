@@ -29,6 +29,5 @@ class BillDivision(ActiveModel, db.Model):
     def get_user_bills_to_pay(cls, user_id):
         return cls.query.filter(cls.user_id==user_id, cls.payed==0).all()
 
-
     def __repr__(self):
         return '<Bill Division bill_id={}, user_id={}>'.format(self.bill_id, self.user_id)

@@ -28,7 +28,7 @@
                         <td>{{ division.bill.pretty_date }}</td>
                         <td>{{ division.bill.comment }}</td>
                         <td style="text-align:center">${{ '{:,}'.format(division.bill.division_amount()) }}</td>
-                        <td style="text-align:center"><i class="fa fa-credit-card text-navy"></i></td>
+                        <td style="text-align:center"><a href="{{ division.bill.venmo_link() }}"><i class="fa fa-credit-card text-navy"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>

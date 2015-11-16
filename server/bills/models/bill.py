@@ -1,4 +1,6 @@
+import urllib
 from datetime import datetime
+
 from server.db import db, ActiveModel
 
 
@@ -14,10 +16,15 @@ class Bill(ActiveModel, db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     bill_type = db.relationship('BillType', foreign_keys='Bill.type_id', uselist=False, backref='bills')
+    user = db.relationship('User', foreign_keys='Bill.user_id', uselist=False, backref='bills')
 
     @property
     def pretty_date(self):
         return self.created_at.strftime('%b %d, %Y')
+
+    @property
+    def venmo_note(self):
+        return '{} Bill'.format(self.bill_type.name)
 
     @classmethod
     def create_bill(cls, form, user_id):
@@ -30,6 +37,15 @@ class Bill(ActiveModel, db.Model):
         )
         bill.save()
         return bill
+
+    def venmo_link(self):
+        params = urllib.urlencode({
+            'recipients': self.user.venmo_account,
+            'amount': self.division_amount(),
+            'note': self.venmo_note,
+            'audience': 'public'
+        })
+        return 'https://venmo.com/?txn=pay&{}'.format(params)
 
     def division_amount(self):
         from server.bills.models import BillDivision
