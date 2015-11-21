@@ -42,6 +42,7 @@ def view_bill(bill_id):
 
 @bills.route('/user')
 @bills.route('/user/<int:user_id>')
+@login_required
 def user_bills(user_id=None):
     if not user_id:
         user_id = current_user.id
