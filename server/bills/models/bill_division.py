@@ -22,6 +22,7 @@ class BillDivision(ActiveModel, db.Model):
             users_to_pay = User.query
             if exclude is not None:
                 users_to_pay = users_to_pay.filter(User.id!=exclude)
+            # There probably is a better way to just get the id
             users_to_pay = map(lambda x: x.id, users_to_pay.all())
 
         for user_id in users_to_pay:
