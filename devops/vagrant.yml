@@ -3,6 +3,6 @@
   sudo: yes
   roles:
     - common
-#    - mysql/shared
+    - ANXS.python
 #    - mysql/provision
 #    - mysql/configure
