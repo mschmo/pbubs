@@ -1,0 +1,8 @@
+---
+- hosts: vagrant
+  sudo: yes
+  roles:
+    - common
+#    - mysql/shared
+#    - mysql/provision
+#    - mysql/configure
