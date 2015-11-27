@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
   # Provision vagrant machine with Ansible
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "devops/vagrant.yml"
-    ansible.inventory_path = "devops/inventory/hosts"
+    ansible.inventory_path = "devops/local"
     ansible.sudo = true
     ansible.verbose = 'vvvv'
     ansible.limit = 'vagrant'

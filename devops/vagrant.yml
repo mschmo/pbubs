@@ -2,7 +2,6 @@
 - hosts: vagrant
   sudo: yes
   roles:
-    - common
-    - ANXS.python
-#    - mysql/provision
-#    - mysql/configure
+    - common   # Basic configurations
+    - python   # Install python enviroment
+    - mysql    # Install and configure mysql

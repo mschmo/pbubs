@@ -1,2 +1,3 @@
----
-test: 'yes'
+# Not sure how to fucking get this to work...
+mysql:
+  mysql_bind_address: 0.0.0.0
